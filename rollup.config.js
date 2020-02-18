@@ -16,49 +16,49 @@ const env = process.env.BUILD_ENV || 'development';
 
 const manifest = entryManifest();
 
-const client = ['browse', 'main'].map(entryName => {
-  return {
-    external: ['@emotion/core', 'react', 'react-dom'],
-    input: `modules/client/${entryName}.js`,
-    output: {
-      format: 'iife',
-      dir: 'public/_client',
-      entryFileNames: '[name]-[hash].js',
-      globals: {
-        react: 'React',
-        'react-dom': 'ReactDOM',
-        '@emotion/core': 'emotionCore'
-      }
-    },
-    plugins: [
-      manifest.record({ publicPath: '/_client/' }),
-      babel({ exclude: /node_modules/ }),
-      json(),
-      resolve(),
-      commonjs({
-        namedExports: {
-          'node_modules/react/index.js': [
-            'createContext',
-            'createElement',
-            'forwardRef',
-            'Component',
-            'Fragment'
-          ]
-        }
-      }),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(env)
-      }),
-      url({
-        limit: 5 * 1024,
-        publicPath: '/_client/'
-      }),
-      compiler(
-        env !== 'production' ? { formatting: 'PRETTY_PRINT' } : undefined
-      )
-    ]
-  };
-});
+// const client = ['browse', 'main'].map(entryName => {
+//   return {
+//     external: ['@emotion/core', 'react', 'react-dom'],
+//     input: `modules/client/${entryName}.js`,
+//     output: {
+//       format: 'iife',
+//       dir: 'public/_client',
+//       entryFileNames: '[name]-[hash].js',
+//       globals: {
+//         react: 'React',
+//         'react-dom': 'ReactDOM',
+//         '@emotion/core': 'emotionCore'
+//       }
+//     },
+//     plugins: [
+//       manifest.record({ publicPath: '/_client/' }),
+//       babel({ exclude: /node_modules/ }),
+//       json(),
+//       resolve(),
+//       commonjs({
+//         namedExports: {
+//           'node_modules/react/index.js': [
+//             'createContext',
+//             'createElement',
+//             'forwardRef',
+//             'Component',
+//             'Fragment'
+//           ]
+//         }
+//       }),
+//       replace({
+//         'process.env.NODE_ENV': JSON.stringify(env)
+//       }),
+//       url({
+//         limit: 5 * 1024,
+//         publicPath: '/_client/'
+//       }),
+//       compiler(
+//         env !== 'production' ? { formatting: 'PRETTY_PRINT' } : undefined
+//       )
+//     ]
+//   };
+// });
 
 const dependencies = (env === 'development'
   ? Object.keys(pkg.dependencies).concat(Object.keys(pkg.devDependencies || {}))
@@ -93,4 +93,4 @@ const server = {
   ]
 };
 
-module.exports = client.concat(server);
+module.exports = server;

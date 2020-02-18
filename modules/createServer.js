@@ -120,39 +120,20 @@ export default function createServer() {
 
       app.get(
         '*',
-        allowQuery(['module', 'types']),
+        noQuery(),
         validatePackagePathname,
         validatePackageName,
         validatePackageVersion,
         validateFilename,
         findEntry,
         addTypesHeader,
-        serveModule
+        serveModule,
+        serveFile
       );
     });
 
-    app.use((req, res, next) => {
-      if (req.query.module != null) {
-        moduleApp(req, res);
-      } else {
-        next();
-      }
+    app.use((req, res) => {
+      moduleApp(req, res);
     });
-
-    // Send old */ requests to the new /browse UI.
-    app.get('*/', (req, res) => {
-      res.redirect(302, '/browse' + req.url);
-    });
-
-    app.get(
-      '*',
-      noQuery(),
-      validatePackagePathname,
-      validatePackageName,
-      validatePackageVersion,
-      validateFilename,
-      findEntry,
-      serveFile
-    );
   });
 }

@@ -1,7 +1,7 @@
 import serveHTMLModule from './serveHTMLModule.js';
 import serveJavaScriptModule from './serveJavaScriptModule.js';
 
-export default function serveModule(req, res) {
+export default function serveModule(req, res, next) {
   const { contentType } = req.entry;
   if (
     contentType === 'application/javascript' ||
@@ -14,8 +14,5 @@ export default function serveModule(req, res) {
     return serveHTMLModule(req, res);
   }
 
-  res
-    .status(403)
-    .type('text')
-    .send('module mode is available only for JavaScript and HTML files');
+  next();
 }

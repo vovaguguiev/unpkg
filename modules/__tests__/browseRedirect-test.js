@@ -2,7 +2,7 @@ import request from 'supertest';
 
 import createServer from '../createServer.js';
 
-describe('A request with a trailing slash', () => {
+describe.skip('A request with a trailing slash', () => {
   let server;
   beforeEach(() => {
     server = createServer();

@@ -2,7 +2,7 @@ import request from 'supertest';
 
 import createServer from '../createServer';
 
-describe('Legacy URLs', () => {
+describe.skip('Legacy URLs', () => {
   let server;
   beforeEach(() => {
     server = createServer();

@@ -2,7 +2,7 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import semver from 'semver';
-import getTypesPackageName from '../utils/getTypesPackagename';
+import getTypesPackageName from '../utils/getTypesPackageName';
 
 const origin = process.env.ORIGIN || 'https://unpkg.com';
 
@@ -53,12 +53,14 @@ function resolveTypesUrl(url, log) {
 
 // A part of the logic responsible for typings resolution lives in findEntry.js
 export default async function addTypesHeader(req, res, next) {
-  if (req.query.types == null) {
+  const { packageName, packageVersion, filename } = req;
+
+  // we shouldn't try to resolve typings for the files
+  // that already contain typings in them
+  if (filename.endsWith('.ts') || filename.endsWith('.tsx')) {
     next();
     return;
   }
-
-  const { packageName, packageVersion } = req;
 
   if (req.localTypingEntries && req.localTypingEntries.length > 0) {
     const topPriorityLocalTypingEntry = req.localTypingEntries[0];
@@ -66,7 +68,7 @@ export default async function addTypesHeader(req, res, next) {
       'X-TypeScript-Types': path.join(
         origin,
         `${packageName}@${packageVersion}`,
-        `${topPriorityLocalTypingEntry}?module&types`
+        `${topPriorityLocalTypingEntry}`
       )
     });
     next();
@@ -76,9 +78,9 @@ export default async function addTypesHeader(req, res, next) {
   const typesPackageName = getTypesPackageName(packageName);
   const { major, minor } = semver.parse(packageVersion);
   const typesPackageVersion = `${major}.${minor}`;
-  const { dir, name } = path.parse(req.filename);
+  const { dir, name } = path.parse(filename);
   const filenameSansExtension = path.join(dir, name);
-  const typesPackageURL = `${origin}/${typesPackageName}@${typesPackageVersion}${filenameSansExtension}.d.ts?module&types`;
+  const typesPackageURL = `${origin}/${typesPackageName}@${typesPackageVersion}${filenameSansExtension}.d.ts`;
   try {
     const resolvedTypesUrl = await resolveTypesUrl(typesPackageURL, req.log);
 

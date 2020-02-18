@@ -16,10 +16,38 @@ describe('A request for a module', () => {
     stopServer(done);
   });
 
-  describe('when "types" query parameter is NOT set', () => {
+  describe('for modules that have typings lying alongside them', () => {
+    it('includes "X-Typescript-Types" header', done => {
+      request(server)
+        .get('/react-sunbeam@0.11.0/dist/es/index.js')
+        .end((err, res) => {
+          expect(res.statusCode).toBe(200);
+          expect(res.headers['x-typescript-types']).toBe(
+            'http:/127.0.0.1:62062/react-sunbeam@0.11.0/dist/es/index.d.ts'
+          );
+          done();
+        });
+    });
+  });
+
+  describe('for modules that have typings in a corresponding @types/xxx package', () => {
+    it('includes "X-Typescript-Types" header', done => {
+      request(server)
+        .get('/lodash-es@4.17.15/clamp.js')
+        .end((err, res) => {
+          expect(res.statusCode).toBe(200);
+          expect(res.headers['x-typescript-types']).toBe(
+            'http://127.0.0.1:62062/@types/lodash-es@4.17.3/clamp.d.ts'
+          );
+          done();
+        });
+    });
+  });
+
+  describe("for modules that don't have typings", () => {
     it('doesn\'t include "X-Typescript-Types" header', done => {
       request(server)
-        .get('/lodash-es@4.17.15/clamp.js?module')
+        .get('/lodash-es@4.17.15/_freeGlobal.js')
         .end((err, res) => {
           expect(res.statusCode).toBe(200);
           expect(res.headers['x-typescript-types']).toBe(undefined);
@@ -28,45 +56,15 @@ describe('A request for a module', () => {
     });
   });
 
-  describe('when "types" query parameter is set', () => {
-    describe('for modules that have typings lying alongside them', () => {
-      it('includes "X-Typescript-Types" header', done => {
-        request(server)
-          .get('/react-sunbeam@0.11.0/dist/es/index.js?module&types')
-          .end((err, res) => {
-            expect(res.statusCode).toBe(200);
-            expect(res.headers['x-typescript-types']).toBe(
-              'http:/127.0.0.1:62062/react-sunbeam@0.11.0/dist/es/index.d.ts?module&types'
-            );
-            done();
-          });
-      });
-    });
-
-    describe('for modules that have typings in a corresponding @types/xxx package', () => {
-      it('includes "X-Typescript-Types" header', done => {
-        request(server)
-          .get('/lodash-es@4.17.15/clamp.js?module&types')
-          .end((err, res) => {
-            expect(res.statusCode).toBe(200);
-            expect(res.headers['x-typescript-types']).toBe(
-              'http://127.0.0.1:62062/@types/lodash-es@4.17.3/clamp.d.ts?module&types'
-            );
-            done();
-          });
-      });
-    });
-
-    describe("for modules that don't have typings", () => {
-      it('doesn\'t include "X-Typescript-Types" header', done => {
-        request(server)
-          .get('/lodash-es@4.17.15/_freeGlobal.js?module&types')
-          .end((err, res) => {
-            expect(res.statusCode).toBe(200);
-            expect(res.headers['x-typescript-types']).toBe(undefined);
-            done();
-          });
-      });
+  describe('for typescript files', () => {
+    it('doesn\'t include "X-Typescript-Types" header', done => {
+      request(server)
+        .get('/@types/lodash-es@4.17.3/clamp.d.ts')
+        .end((err, res) => {
+          expect(res.statusCode).toBe(200);
+          expect(res.headers['x-typescript-types']).toBe(undefined);
+          done();
+        });
     });
   });
 });

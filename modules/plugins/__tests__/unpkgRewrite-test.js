@@ -5,28 +5,27 @@ import unpkgRewrite from '../unpkgRewrite.js';
 const testCases = [
   {
     before: 'import React from "react";',
-    after: 'import React from "https://unpkg.com/react@15.6.1?module";'
+    after: 'import React from "https://unpkg.com/react@15.6.1";'
   },
   {
     before: 'import router from "@angular/router";',
-    after:
-      'import router from "https://unpkg.com/@angular/router@4.3.5?module";'
+    after: 'import router from "https://unpkg.com/@angular/router@4.3.5";'
   },
   {
     before: 'import map from "lodash.map";',
-    after: 'import map from "https://unpkg.com/lodash.map@4.6.0?module";'
+    after: 'import map from "https://unpkg.com/lodash.map@4.6.0";'
   },
   {
     before: 'import fs from "pn/fs";',
-    after: 'import fs from "https://unpkg.com/pn@1.0.0/fs?module";'
+    after: 'import fs from "https://unpkg.com/pn@1.0.0/fs";'
   },
   {
     before: 'import cupcakes from "./cupcakes";',
-    after: 'import cupcakes from "./cupcakes?module";'
+    after: 'import cupcakes from "./cupcakes";'
   },
   {
     before: 'import shoelaces from "/shoelaces";',
-    after: 'import shoelaces from "/shoelaces?module";'
+    after: 'import shoelaces from "/shoelaces";'
   },
   {
     before: 'import something from "//something.com/whatevs";',
@@ -42,15 +41,15 @@ const testCases = [
   },
   {
     before: 'export React from "react";',
-    after: 'export React from "https://unpkg.com/react@15.6.1?module";'
+    after: 'export React from "https://unpkg.com/react@15.6.1";'
   },
   {
     before: 'export { Component } from "react";',
-    after: 'export { Component } from "https://unpkg.com/react@15.6.1?module";'
+    after: 'export { Component } from "https://unpkg.com/react@15.6.1";'
   },
   {
     before: 'export * from "react";',
-    after: 'export * from "https://unpkg.com/react@15.6.1?module";'
+    after: 'export * from "https://unpkg.com/react@15.6.1";'
   },
   {
     before: 'export var message = "hello";',
@@ -58,11 +57,11 @@ const testCases = [
   },
   {
     before: 'import("./something.js");',
-    after: 'import("./something.js?module");'
+    after: 'import("./something.js");'
   },
   {
     before: 'import("react");',
-    after: 'import("https://unpkg.com/react@15.6.1?module");'
+    after: 'import("https://unpkg.com/react@15.6.1");'
   }
 ];
 

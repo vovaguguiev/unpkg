@@ -1,6 +1,6 @@
 import URL from 'whatwg-url';
 import warning from 'warning';
-import getTypesPackageName from '../utils/getTypesPackagename';
+import getTypesPackageName from '../utils/getTypesPackageName';
 
 const bareIdentifierFormat = /^((?:@[^/]+\/)?[^/]+)(\/.*)?$/;
 
@@ -48,7 +48,6 @@ function rewriteValue(
   /* StringLiteral */ node,
   origin,
   dependencies,
-  resolveTypes = false,
   isTypeScript = false
 ) {
   if (isAbsoluteURL(node.value)) {
@@ -67,19 +66,13 @@ function rewriteValue(
       isTypeScript
     );
 
-    node.value = `${origin}/${dependencyName}@${dependencyVersion}${file}?module${
-      resolveTypes ? '&types' : ''
-    }`;
-  } else {
-    // local path
-    node.value = `${node.value}?module${resolveTypes ? '&types' : ''}`;
+    node.value = `${origin}/${dependencyName}@${dependencyVersion}${file}`;
   }
 }
 
 export default function unpkgRewrite(
   origin,
   dependencies = {},
-  resolveTypes = false,
   isTypeScript = false
 ) {
   return {
@@ -104,18 +97,11 @@ export default function unpkgRewrite(
           path.node.arguments[0],
           origin,
           dependencies,
-          resolveTypes,
           isTypeScript
         );
       },
       ExportAllDeclaration(path) {
-        rewriteValue(
-          path.node.source,
-          origin,
-          dependencies,
-          resolveTypes,
-          isTypeScript
-        );
+        rewriteValue(path.node.source, origin, dependencies, isTypeScript);
       },
       ExportNamedDeclaration(path) {
         if (!path.node.source) {
@@ -127,22 +113,10 @@ export default function unpkgRewrite(
           return;
         }
 
-        rewriteValue(
-          path.node.source,
-          origin,
-          dependencies,
-          resolveTypes,
-          isTypeScript
-        );
+        rewriteValue(path.node.source, origin, dependencies, isTypeScript);
       },
       ImportDeclaration(path) {
-        rewriteValue(
-          path.node.source,
-          origin,
-          dependencies,
-          resolveTypes,
-          isTypeScript
-        );
+        rewriteValue(path.node.source, origin, dependencies, isTypeScript);
       }
     }
   };

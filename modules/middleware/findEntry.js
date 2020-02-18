@@ -51,7 +51,7 @@ function indexRedirect(req, res, entry) {
  * Follows node's resolution algorithm.
  * https://nodejs.org/api/modules.html#modules_all_together
  */
-function searchEntries(stream, filename, { includeTypings } = {}) {
+function searchEntries(stream, filename) {
   // filename = /some/file/name.js or /some/dir/name
   return new Promise((accept, reject) => {
     const { dir, name } = path.parse(filename);
@@ -64,8 +64,7 @@ function searchEntries(stream, filename, { includeTypings } = {}) {
     ];
     // we shouldn't try to resolve typings for the files
     // that already contain typings in them
-    const shouldTryResolveTypings =
-      includeTypings && !typingEntriesFilenames.includes(filename);
+    const shouldTryResolveTypings = !typingEntriesFilenames.includes(filename);
 
     const jsEntryFilename = `${filename}.js`;
     const jsonEntryFilename = `${filename}.json`;
@@ -182,14 +181,11 @@ function searchEntries(stream, filename, { includeTypings } = {}) {
  */
 async function findEntry(req, res, next) {
   const stream = await getPackage(req.packageName, req.packageVersion, req.log);
-  const includeTypings = req.query.types != null;
   const {
     foundEntry: entry,
     matchingEntries: entries,
     typingEntries
-  } = await searchEntries(stream, req.filename, {
-    includeTypings
-  });
+  } = await searchEntries(stream, req.filename);
 
   if (!entry) {
     return res
@@ -229,9 +225,7 @@ async function findEntry(req, res, next) {
   }
 
   req.entry = entry;
-  if (includeTypings) {
-    req.localTypingEntries = typingEntries;
-  }
+  req.localTypingEntries = typingEntries;
 
   next();
 }

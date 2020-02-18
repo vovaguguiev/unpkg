@@ -7,7 +7,6 @@ const origin = process.env.ORIGIN || 'https://unpkg.com';
 export default function rewriteBareModuleIdentifiers(
   code,
   packageConfig,
-  resolveTypes,
   isTypeScript
 ) {
   const dependencies = Object.assign(
@@ -25,7 +24,7 @@ export default function rewriteBareModuleIdentifiers(
     // from the original file. This ensures minified
     // .mjs stays minified; see #149
     retainLines: true,
-    plugins: [unpkgRewrite(origin, dependencies, resolveTypes, isTypeScript)]
+    plugins: [unpkgRewrite(origin, dependencies, isTypeScript)]
   };
 
   return transform(code, options).code;

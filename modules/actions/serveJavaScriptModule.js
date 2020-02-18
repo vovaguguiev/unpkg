@@ -9,7 +9,6 @@ export default function serveJavaScriptModule(req, res) {
     const code = rewriteBareModuleIdentifiers(
       req.entry.content.toString('utf8'),
       req.packageConfig,
-      req.query.types != null,
       isTypeScript
     );
 
