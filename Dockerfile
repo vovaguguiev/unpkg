@@ -12,7 +12,7 @@ COPY . .
 
 ARG CLOUDFLARE_EMAIL=example@example.com
 ARG CLOUDFLARE_KEY=foo
-ARG ORIGIN=https://esmcdn.com
+ARG ORIGIN=https://www.esmcdn.com
 ARG NODE_ENV=PRODUCTION
 RUN yarn build
 
