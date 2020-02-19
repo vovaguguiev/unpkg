@@ -37,7 +37,7 @@ function resolveDependencyNameAndVersion(name, dependencies, isTypeScript) {
     'Missing version info for package "%s" in dependencies; falling back to "latest"',
     dependencyName
   );
-  if (!dependencyVersion) {
+  if (!dependencyVersion || dependencyVersion === '*') {
     dependencyVersion = 'latest';
   }
 
