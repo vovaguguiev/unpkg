@@ -65,11 +65,7 @@ export default async function addTypesHeader(req, res, next) {
   if (req.localTypingEntries && req.localTypingEntries.length > 0) {
     const topPriorityLocalTypingEntry = req.localTypingEntries[0];
     res.set({
-      'X-TypeScript-Types': path.join(
-        origin,
-        `${packageName}@${packageVersion}`,
-        `${topPriorityLocalTypingEntry}`
-      )
+      'X-TypeScript-Types': `${origin}/${packageName}@${packageVersion}${topPriorityLocalTypingEntry}`
     });
     next();
     return;
