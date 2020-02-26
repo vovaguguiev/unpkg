@@ -120,7 +120,7 @@ export default function createServer() {
 
       app.get(
         '*',
-        noQuery(),
+        allowQuery('types'),
         validatePackagePathname,
         validatePackageName,
         validatePackageVersion,

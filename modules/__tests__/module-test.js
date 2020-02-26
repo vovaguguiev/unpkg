@@ -30,9 +30,23 @@ describe('A request for a module', () => {
           expect(err).toBe(null);
           expect(res.statusCode).toBe(200);
           expect(res.text).toContain(
-            'import { clamp } from "http://127.0.0.1:62062/@types/lodash@*"'
+            'import { clamp } from "http://127.0.0.1:62062/@types/lodash@latest"'
           );
           done(err);
+        });
+    });
+  });
+
+  describe('with a bare identifier when "types" query parameter is specified', () => {
+    it('redirects to the file specified as "types" in package.json', done => {
+      request(server)
+        .get('/@types/lodash-es@4.17.3?types')
+        .end((err, res) => {
+          expect(res.statusCode).toBe(302);
+          expect(res.headers.location).toBe(
+            '/@types/lodash-es@4.17.3/index.d.ts?types'
+          );
+          done();
         });
     });
   });

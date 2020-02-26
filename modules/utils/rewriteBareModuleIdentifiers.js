@@ -1,8 +1,7 @@
 import { transform } from '@babel/core';
 
 import unpkgRewrite from '../plugins/unpkgRewrite.js';
-
-const origin = process.env.ORIGIN || 'https://unpkg.com';
+import { origin } from '../config';
 
 export default function rewriteBareModuleIdentifiers(
   code,

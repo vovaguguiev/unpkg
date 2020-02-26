@@ -3,8 +3,7 @@ import https from 'https';
 import path from 'path';
 import semver from 'semver';
 import getTypesPackageName from '../utils/getTypesPackageName';
-
-const origin = process.env.ORIGIN || 'https://unpkg.com';
+import { origin } from '../config';
 
 const agent = origin.startsWith('http:')
   ? new http.Agent({
