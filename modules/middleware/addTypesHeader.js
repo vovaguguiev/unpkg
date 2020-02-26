@@ -3,7 +3,7 @@ import https from 'https';
 import path from 'path';
 import semver from 'semver';
 import getTypesPackageName from '../utils/getTypesPackageName';
-import { origin } from '../config';
+import { origin, typesOrigin } from '../config';
 
 const agent = origin.startsWith('http:')
   ? new http.Agent({
@@ -64,7 +64,9 @@ export default async function addTypesHeader(req, res, next) {
   if (req.localTypingEntries && req.localTypingEntries.length > 0) {
     const topPriorityLocalTypingEntry = req.localTypingEntries[0];
     res.set({
-      'X-TypeScript-Types': `${origin}/${packageName}@${packageVersion}${topPriorityLocalTypingEntry}`
+      'X-TypeScript-Types': `${
+        typesOrigin ? typesOrigin : origin
+      }/${packageName}@${packageVersion}${topPriorityLocalTypingEntry}`
     });
     next();
     return;
@@ -75,7 +77,9 @@ export default async function addTypesHeader(req, res, next) {
   const typesPackageVersion = `${major}.${minor}`;
   const { dir, name } = path.parse(filename);
   const filenameSansExtension = path.join(dir, name);
-  const typesPackageURL = `${origin}/${typesPackageName}@${typesPackageVersion}${filenameSansExtension}.d.ts`;
+  const typesPackageURL = `${
+    typesOrigin ? typesOrigin : origin
+  }/${typesPackageName}@${typesPackageVersion}${filenameSansExtension}.d.ts`;
   try {
     const resolvedTypesUrl = await resolveTypesUrl(typesPackageURL, req.log);
 
