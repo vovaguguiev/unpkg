@@ -19,7 +19,7 @@ services:
       - TZ=Europe/Amsterdam
       - LETSENCRYPT=true
       - LE_EMAIL=vladimir.guguiev+import-plugin@gmail.com
-      - LE_FQDN=www.esmcdn.com
+      - LE_FQDN=www.esmcdn.com,types.esmcdn.com
       #- SSL_CERT=le-crt.pem
       #- SSL_KEY=le-key.pem
       #- SSL_CHAIN_CERT=le-chain-crt.pem
