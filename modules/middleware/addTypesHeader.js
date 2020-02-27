@@ -34,7 +34,7 @@ function resolveTypesUrl(url, log) {
       if (res.statusCode >= 300 && res.statusCode < 400 && location) {
         const redirectUrl = new URL(location, url).href;
         log.debug(`Following redirect from ${url} to ${redirectUrl}`);
-        accept(resolveTypesUrl(redirectUrl));
+        accept(resolveTypesUrl(redirectUrl, log));
         return;
       }
 
@@ -54,7 +54,9 @@ function resolveTypesUrl(url, log) {
 
 // A part of the logic responsible for typings resolution lives in findEntry.js
 export default async function addTypesHeader(req, res, next) {
-  const { packageName, packageVersion, filename } = req;
+  const { packageName, packageVersion, filename, log } = req;
+
+  log.debug('TYPES_ORIGIN is ' + typesOrigin);
 
   // we shouldn't try to resolve typings for the files
   // that already contain typings in them
