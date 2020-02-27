@@ -15,6 +15,8 @@ const agent = origin.startsWith('http:')
 
 function resolveTypesUrl(url, log) {
   return new Promise((accept, reject) => {
+    log.debug(`Trying to resolve types from ${url}`);
+
     if (origin.startsWith('http:')) {
       http
         .request(url, { method: 'HEAD', agent }, handleResponse)
