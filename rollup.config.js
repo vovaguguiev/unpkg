@@ -88,7 +88,8 @@ const server = {
       'process.env.NPM_REGISTRY_URL': JSON.stringify(
         process.env.NPM_REGISTRY_URL
       ),
-      'process.env.ORIGIN': JSON.stringify(process.env.ORIGIN)
+      'process.env.ORIGIN': JSON.stringify(process.env.ORIGIN),
+      'process.env.TYPES_ORIGIN': JSON.stringify(process.env.TYPES_ORIGIN)
     })
   ]
 };

@@ -32,7 +32,6 @@ services:
     container_name: app
     environment:
       - TZ=Europe/Amsterdam
-      - DEBUG=true
     restart: on-failure
     logging:
       driver: "json-file"
