@@ -56,8 +56,6 @@ function resolveTypesUrl(url, log) {
 export default async function addTypesHeader(req, res, next) {
   const { packageName, packageVersion, filename, log } = req;
 
-  log.debug('TYPES_ORIGIN is ' + typesOrigin);
-
   // we shouldn't try to resolve typings for the files
   // that already contain typings in them
   if (filename.endsWith('.ts') || filename.endsWith('.tsx')) {

@@ -5,11 +5,13 @@ import rewriteBareModuleIdentifiers from '../utils/rewriteBareModuleIdentifiers.
 
 export default function serveJavaScriptModule(req, res) {
   const isTypeScript = req.entry.contentType === 'text/x-typescript';
+  const resolvingTypes = req.query.types != null;
   try {
     const code = rewriteBareModuleIdentifiers(
       req.entry.content.toString('utf8'),
       req.packageConfig,
-      isTypeScript
+      isTypeScript,
+      resolvingTypes
     );
 
     res

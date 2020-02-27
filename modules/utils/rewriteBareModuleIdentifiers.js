@@ -1,12 +1,13 @@
 import { transform } from '@babel/core';
 
 import unpkgRewrite from '../plugins/unpkgRewrite.js';
-import { origin } from '../config';
+import { origin, typesOrigin } from '../config';
 
 export default function rewriteBareModuleIdentifiers(
   code,
   packageConfig,
-  isTypeScript
+  isTypeScript,
+  resolvingTypes
 ) {
   const dependencies = Object.assign(
     {},
@@ -23,7 +24,13 @@ export default function rewriteBareModuleIdentifiers(
     // from the original file. This ensures minified
     // .mjs stays minified; see #149
     retainLines: true,
-    plugins: [unpkgRewrite(origin, dependencies, isTypeScript)]
+    plugins: [
+      unpkgRewrite(
+        resolvingTypes && typesOrigin ? typesOrigin : origin,
+        dependencies,
+        isTypeScript
+      )
+    ]
   };
 
   return transform(code, options).code;
